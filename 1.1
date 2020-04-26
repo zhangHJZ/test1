@@ -1,0 +1,98 @@
+class Card():
+    RANKS = [x for x in range(2,11)]
+    RANKS.insert(0,'A')
+    RANKS.append('J')
+    RANKS.append('Q')
+    RANKS.append('K')
+
+    SUITS = ['梅','方','红','黑']
+
+    def __init__(self):
+        if self.is_face_up:
+            rep=self.suit + self.rank
+        else:
+            rep = 'xxx'
+
+        return rep
+
+    def pic_order():
+        if self.rank=='A':
+            Facenumber = 1
+        if self.rank=='J':
+            Facenumber = 11
+        if self.rank=='Q':
+            Facenumber = 12
+        if self.rank=='K':
+            Facenumber = 13
+        else:
+            Facenumber = int(self.rank)
+        if self.suit=='梅':
+            Suit=1
+        elif self.suit=='方':
+            Suit=2
+        elif self.suit=='红':
+            Suit=3
+        else:
+            Suit=4
+
+    def flip(self):
+        self.is_face_up=not self.is_face_up
+
+
+
+class Hand():
+    def __init__(self):
+        self.cards=[]
+    def __str__(self):
+        if self.cards:
+            rep=''
+            for card in self.cards:
+                rep+=str(card)+'\t'
+        else:
+            rep = '无牌'
+
+    def clear(self):
+        self.cards=[]
+    def add(self):
+        self.cards.append(card)
+    def give(self,card,other_hand):
+        self.cards.remove(card)
+        other_hand.add(card)
+
+
+
+class Poke(Hand):
+    def populate(self):
+        for suit in Card.SUITS:
+            for rank in Card.RANKS:
+                self.add(Card(rank,suit))
+
+    def shuffle(self):
+        import random
+        random.shuffle(self.cards)
+
+    def deal(self,hands,per_hand=13):
+        for rounds in range(per_hand):
+            for hand in hands:
+                if self.cards:
+                    top_card=self.cards[0]
+                    self.cards.remove(top_card)
+                    hand.add(top_card)
+                else:
+                    print ("不能继续发牌了，牌已经发完了")
+
+
+
+if __name__=='__main__':
+    players=[Hand(),Hand(),Hand(),Hand()]
+    poke1=Poke()
+    poke1.populate()
+    poke1.shuffle()
+    poke1.deal(players,13)
+
+    n=1
+    for hand in players:
+        print ("牌手：",n,end=':')
+        print (hand)
+        n=n+1
+        input('\n按任意键继续')
